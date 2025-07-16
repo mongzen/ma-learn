@@ -1,0 +1,72 @@
+# Docker Compose override for development environment
+# This file is automatically loaded by docker-compose and extends the main docker-compose.yml
+
+services:
+  malearn-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: deps  # Use deps stage for development with hot reload
+    command: sh -c "corepack enable pnpm && pnpm install && pnpm dev"
+    environment:
+      - NODE_ENV=development
+      - NEXT_TELEMETRY_DISABLED=1
+      - PAYLOAD_SECRET=development-secret-key
+    volumes:
+      - .:/home/node/app
+      - node_modules:/home/node/app/node_modules
+      - /home/node/app/.next  # Exclude .next from bind mount for better performance
+    ports:
+      - "3000:3000"
+      - "9229:9229"  # Node.js debugger port
+
+  # Development database with exposed ports
+  mongo:
+    ports:
+      - "27017:27017"
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=admin
+      - MONGO_INITDB_ROOT_PASSWORD=password
+    volumes:
+      - mongo_data:/data/db
+      - ./scripts/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+
+  # Development Redis
+  redis:
+    ports:
+      - "6379:6379"
+    command: redis-server --appendonly yes
+
+  # MongoDB Express for database management (development only)
+  mongo-express:
+    image: mongo-express:latest
+    ports:
+      - "8081:8081"
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: admin
+      ME_CONFIG_MONGODB_ADMINPASSWORD: password
+      ME_CONFIG_MONGODB_URL: mongodb://admin:password@mongo:27017/
+      ME_CONFIG_BASICAUTH_USERNAME: admin
+      ME_CONFIG_BASICAUTH_PASSWORD: admin
+    depends_on:
+      - mongo
+    networks:
+      - malearn-network
+
+  # Redis Commander for Redis management (development only)
+  redis-commander:
+    image: rediscommander/redis-commander:latest
+    ports:
+      - "8082:8081"
+    environment:
+      - REDIS_HOSTS=local:redis:6379:0:redis_password
+    depends_on:
+      - redis
+    networks:
+      - malearn-network
+
+volumes:
+  mongo_data:
+  redis_data:
+  node_modules:
+  uploads:

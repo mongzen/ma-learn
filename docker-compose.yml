@@ -1,0 +1,84 @@
+services:
+  # Main Application Service
+  malearn-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - '3000:3000'
+    volumes:
+      - .:/home/node/app
+      - node_modules:/home/node/app/node_modules
+      - uploads:/home/node/app/media
+    working_dir: /home/node/app/
+    command: sh -c "corepack enable pnpm && pnpm install && pnpm dev"
+    depends_on:
+      - mongo
+      - redis
+    env_file:
+      - .env
+    environment:
+      - NODE_ENV=development
+      - DATABASE_URI=mongodb://mongo:27017/malearn
+      - REDIS_URL=redis://redis:6379
+    networks:
+      - malearn-network
+    restart: unless-stopped
+
+  # MongoDB Database
+  mongo:
+    image: mongo:7.0
+    ports:
+      - '27017:27017'
+    command:
+      - --storageEngine=wiredTiger
+      - --auth
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=admin
+      - MONGO_INITDB_ROOT_PASSWORD=password
+      - MONGO_INITDB_DATABASE=malearn
+    volumes:
+      - mongo_data:/data/db
+      - ./scripts/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+    networks:
+      - malearn-network
+    restart: unless-stopped
+
+  # Redis for Caching and Sessions
+  redis:
+    image: redis:7-alpine
+    ports:
+      - '6379:6379'
+    command: redis-server --appendonly yes --requirepass redis_password
+    volumes:
+      - redis_data:/data
+    networks:
+      - malearn-network
+    restart: unless-stopped
+
+  # Nginx Reverse Proxy (optional, for production)
+  nginx:
+    image: nginx:alpine
+    ports:
+      - '80:80'
+      - '443:443'
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./ssl:/etc/nginx/ssl:ro
+    depends_on:
+      - malearn-app
+    networks:
+      - malearn-network
+    restart: unless-stopped
+    profiles:
+      - production
+
+volumes:
+  mongo_data:
+  redis_data:
+  node_modules:
+  uploads:
+
+networks:
+  malearn-network:
+    driver: bridge
