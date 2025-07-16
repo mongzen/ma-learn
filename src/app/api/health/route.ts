@@ -2,7 +2,7 @@ import config from '@/payload.config'
 import { getPayloadHMR } from '@payloadcms/next/utilities'
 import { NextRequest, NextResponse } from 'next/server'
 
-export async function GET(request: NextRequest) {
+export async function GET(_request: NextRequest) {
   try {
     const payload = await getPayloadHMR({ config })
 

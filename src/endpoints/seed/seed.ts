@@ -587,7 +587,8 @@ const seedData = async () => {
           metaTitle: 'Machine Learning with Python - Advanced Course',
           metaDescription:
             'Master machine learning with Python, scikit-learn, and TensorFlow. Build predictive models and neural networks.',
-          keywords: 'machine learning, python, scikit-learn, tensorflow, deep learning, neural networks',
+          keywords:
+            'machine learning, python, scikit-learn, tensorflow, deep learning, neural networks',
         },
       },
     })

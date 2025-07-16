@@ -13,7 +13,7 @@ const seedData = async () => {
   try {
     // Create admin user
     console.log('Creating admin user...')
-    const adminUser = await payload.create({
+    const _adminUser = await payload.create({
       collection: 'users',
       data: {
         name: 'MaLearn Admin',
@@ -26,7 +26,7 @@ const seedData = async () => {
 
     // Create instructor user
     console.log('Creating instructor user...')
-    const instructor = await payload.create({
+    const _instructor = await payload.create({
       collection: 'users',
       data: {
         name: 'John Doe',
@@ -39,7 +39,7 @@ const seedData = async () => {
 
     // Create student user
     console.log('Creating student user...')
-    const student = await payload.create({
+    const _student = await payload.create({
       collection: 'users',
       data: {
         name: 'Jane Smith',
@@ -52,7 +52,7 @@ const seedData = async () => {
 
     // Create categories
     console.log('Creating categories...')
-    const webDevCategory = await payload.create({
+    const _webDevCategory = await payload.create({
       collection: 'categories',
       data: {
         title: 'Web Development',
@@ -60,7 +60,7 @@ const seedData = async () => {
       },
     })
 
-    const dataScienceCategory = await payload.create({
+    const _dataScienceCategory = await payload.create({
       collection: 'categories',
       data: {
         title: 'Data Science',
@@ -68,7 +68,7 @@ const seedData = async () => {
       },
     })
 
-    const designCategory = await payload.create({
+    const _designCategory = await payload.create({
       collection: 'categories',
       data: {
         title: 'Design',

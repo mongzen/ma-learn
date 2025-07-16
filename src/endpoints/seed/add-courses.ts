@@ -1,7 +1,5 @@
 import config from '@payload-config'
 import { getPayload } from 'payload'
-import fs from 'fs'
-import path from 'path'
 
 const addMoreCourses = async () => {
   const payload = await getPayload({ config })
@@ -13,12 +11,12 @@ const addMoreCourses = async () => {
     const instructors = await payload.find({
       collection: 'users',
       where: { role: { equals: 'instructor' } },
-      limit: 1
+      limit: 1,
     })
 
     const categories = await payload.find({
       collection: 'categories',
-      limit: 10
+      limit: 10,
     })
 
     if (instructors.docs.length === 0) {
@@ -27,14 +25,19 @@ const addMoreCourses = async () => {
     }
 
     const instructor = instructors.docs[0]
-    const webDevCategory = categories.docs.find(c => c.slug === 'web-development')
-    const dataScienceCategory = categories.docs.find(c => c.slug === 'data-science')  
-    const designCategory = categories.docs.find(c => c.slug === 'design')
+    const webDevCategory = categories.docs.find((c) => c.slug === 'web-development')
+    const dataScienceCategory = categories.docs.find((c) => c.slug === 'data-science')
+    const designCategory = categories.docs.find((c) => c.slug === 'design')
+
+    if (!webDevCategory || !dataScienceCategory || !designCategory) {
+      console.log('❌ Required categories not found in database')
+      return
+    }
 
     // Check for existing media files first
     const existingMedia = await payload.find({
       collection: 'media',
-      limit: 1
+      limit: 1,
     })
 
     let dummyMedia
@@ -48,132 +51,137 @@ const addMoreCourses = async () => {
     }
 
     // Create Node.js course
-    const nodeCourse = await payload.create({
-      collection: 'courses',
-      data: {
-        title: 'Node.js Backend Development',
-        slug: 'nodejs-backend-development',
-        description: {
-          root: {
-            type: 'root',
-            children: [
-              {
-                type: 'paragraph',
-                version: 1,
-                children: [
-                  {
-                    type: 'text',
-                    version: 1,
-                    text: 'Learn to build scalable backend applications with Node.js, Express, and MongoDB. Master REST APIs, authentication, and deployment.',
-                  },
-                ],
-              },
-            ],
-            direction: 'ltr',
-            format: '',
-            indent: 0,
-            version: 1,
-          },
-        },
-        shortDescription:
-          'Complete Node.js course covering server-side development, APIs, and database integration.',
-        instructor: instructor.id,
-        category: webDevCategory?.id,
-        thumbnail: dummyMedia?.id,
-        tags: [
-          { tag: 'Node.js' },
-          { tag: 'Backend' },
-          { tag: 'Express' },
-          { tag: 'MongoDB' },
-          { tag: 'API' },
-        ],
-        price: {
-          fiatPrice: 89.99,
-          cryptoPrice: [
-            { currency: 'eth', price: 0.045 },
-            { currency: 'btc', price: 0.0018 },
+    const courseData1 = {
+      title: 'Node.js Backend Development',
+      slug: 'nodejs-backend-development',
+      description: {
+        root: {
+          type: 'root',
+          children: [
+            {
+              type: 'paragraph',
+              version: 1,
+              children: [
+                {
+                  type: 'text',
+                  version: 1,
+                  text: 'Learn to build scalable backend applications with Node.js, Express, and MongoDB. Master REST APIs, authentication, and deployment.',
+                },
+              ],
+            },
           ],
-        },
-        duration: {
-          hours: 45,
-          lessons: 180,
-        },
-        difficulty: 'intermediate',
-        language: 'en',
-        requirements: [
-          { requirement: 'Basic JavaScript knowledge' },
-          { requirement: 'Understanding of HTTP protocols' },
-          { requirement: 'Basic command line skills' },
-        ],
-        whatYouWillLearn: [
-          { outcome: 'Build REST APIs with Express.js' },
-          { outcome: 'Database integration with MongoDB' },
-          { outcome: 'Authentication and authorization' },
-          { outcome: 'Deploy applications to production' },
-          { outcome: 'Error handling and logging' },
-        ],
-        curriculum: [
-          {
-            sectionTitle: 'Node.js Fundamentals',
-            lessons: [
-              {
-                title: 'Introduction to Node.js',
-                type: 'video',
-                duration: 20,
-                isFree: true,
-              },
-              {
-                title: 'Setting up Development Environment',
-                type: 'video',
-                duration: 15,
-                isFree: true,
-              },
-              {
-                title: 'Node.js Modules and NPM',
-                type: 'video',
-                duration: 25,
-                isFree: false,
-              },
-            ],
-          },
-          {
-            sectionTitle: 'Express.js Framework',
-            lessons: [
-              {
-                title: 'Getting Started with Express',
-                type: 'video',
-                duration: 30,
-                isFree: false,
-              },
-              {
-                title: 'Routing and Middleware',
-                type: 'video',
-                duration: 40,
-                isFree: false,
-              },
-              {
-                title: 'Building REST APIs',
-                type: 'video',
-                duration: 45,
-                isFree: false,
-              },
-            ],
-          },
-        ],
-        status: 'published',
-        featured: true,
-        seo: {
-          metaTitle: 'Node.js Backend Development - Complete Course',
-          metaDescription:
-            'Master Node.js backend development with Express, MongoDB, and REST APIs. Build scalable server applications.',
-          keywords: 'nodejs, backend, express, mongodb, rest api, server development',
+          direction: 'ltr',
+          format: '',
+          indent: 0,
+          version: 1,
         },
       },
+      shortDescription:
+        'Complete Node.js course covering server-side development, APIs, and database integration.',
+      instructor: instructor.id,
+      category: webDevCategory.id,
+      tags: [
+        { tag: 'Node.js' },
+        { tag: 'Backend' },
+        { tag: 'Express' },
+        { tag: 'MongoDB' },
+        { tag: 'API' },
+      ],
+      price: {
+        fiatPrice: 89.99,
+        cryptoPrice: [
+          { currency: 'eth', price: 0.045 },
+          { currency: 'btc', price: 0.0018 },
+        ],
+      },
+      duration: {
+        hours: 45,
+        lessons: 180,
+      },
+      difficulty: 'intermediate',
+      language: 'en',
+      requirements: [
+        { requirement: 'Basic JavaScript knowledge' },
+        { requirement: 'Understanding of HTTP protocols' },
+        { requirement: 'Basic command line skills' },
+      ],
+      whatYouWillLearn: [
+        { outcome: 'Build REST APIs with Express.js' },
+        { outcome: 'Database integration with MongoDB' },
+        { outcome: 'Authentication and authorization' },
+        { outcome: 'Deploy applications to production' },
+        { outcome: 'Error handling and logging' },
+      ],
+      curriculum: [
+        {
+          sectionTitle: 'Node.js Fundamentals',
+          lessons: [
+            {
+              title: 'Introduction to Node.js',
+              type: 'video',
+              duration: 20,
+              isFree: true,
+            },
+            {
+              title: 'Setting up Development Environment',
+              type: 'video',
+              duration: 15,
+              isFree: true,
+            },
+            {
+              title: 'Node.js Modules and NPM',
+              type: 'video',
+              duration: 25,
+              isFree: false,
+            },
+          ],
+        },
+        {
+          sectionTitle: 'Express.js Framework',
+          lessons: [
+            {
+              title: 'Getting Started with Express',
+              type: 'video',
+              duration: 30,
+              isFree: false,
+            },
+            {
+              title: 'Routing and Middleware',
+              type: 'video',
+              duration: 40,
+              isFree: false,
+            },
+            {
+              title: 'Building REST APIs',
+              type: 'video',
+              duration: 45,
+              isFree: false,
+            },
+          ],
+        },
+      ],
+      status: 'published',
+      featured: true,
+      seo: {
+        metaTitle: 'Node.js Backend Development - Complete Course',
+        metaDescription:
+          'Master Node.js backend development with Express, MongoDB, and REST APIs. Build scalable server applications.',
+        keywords: 'nodejs, backend, express, mongodb, rest api, server development',
+      },
+    } as any
+
+    if (dummyMedia) {
+      courseData1.thumbnail = dummyMedia.id
+    }
+
+    const _nodeCourse = await payload.create({
+      collection: 'courses',
+      data: courseData1,
     })
     console.log('✓ Node.js course created')
 
     // Create UI/UX Design course
-    const uiuxCourse = await payload.create({
+    const _uiuxCourse = await payload.create({
       collection: 'courses',
       data: {
         title: 'UI/UX Design Fundamentals',
@@ -203,7 +211,7 @@ const addMoreCourses = async () => {
         shortDescription:
           'Complete UI/UX design course covering design principles, Figma, and user research.',
         instructor: instructor.id,
-        category: designCategory?.id,
+        category: designCategory.id,
         thumbnail: dummyMedia?.id,
         tags: [
           { tag: 'UI Design' },
@@ -298,7 +306,7 @@ const addMoreCourses = async () => {
     console.log('✓ UI/UX Design course created')
 
     // Create Machine Learning course
-    const mlCourse = await payload.create({
+    const _mlCourse = await payload.create({
       collection: 'courses',
       data: {
         title: 'Machine Learning with Python',
@@ -328,7 +336,7 @@ const addMoreCourses = async () => {
         shortDescription:
           'Comprehensive machine learning course with Python, scikit-learn, and TensorFlow.',
         instructor: instructor.id,
-        category: dataScienceCategory?.id,
+        category: dataScienceCategory.id,
         thumbnail: dummyMedia?.id,
         tags: [
           { tag: 'Machine Learning' },
@@ -439,7 +447,8 @@ const addMoreCourses = async () => {
           metaTitle: 'Machine Learning with Python - Advanced Course',
           metaDescription:
             'Master machine learning with Python, scikit-learn, and TensorFlow. Build predictive models and neural networks.',
-          keywords: 'machine learning, python, scikit-learn, tensorflow, deep learning, neural networks',
+          keywords:
+            'machine learning, python, scikit-learn, tensorflow, deep learning, neural networks',
         },
       },
     })

@@ -98,7 +98,7 @@ export const Courses: CollectionConfig = {
       name: 'thumbnail',
       type: 'upload',
       relationTo: 'media',
-      required: true,
+      required: false,
       label: 'Course Thumbnail',
     },
     {

@@ -42,7 +42,7 @@ export const isInstructorOrOwner: Access = ({ req, id }) => {
   return user.role === 'instructor' || user.id === id
 }
 
-export const canAccessCourse: Access = ({ req, id }) => {
+export const canAccessCourse: Access = ({ req, id: _id }) => {
   const user = req.user
   if (!user) return false
 
