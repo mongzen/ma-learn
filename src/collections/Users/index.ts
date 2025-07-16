@@ -19,11 +19,7 @@ export const Users: CollectionConfig = {
   },
   auth: {
     tokenExpiration: 7200, // 2 hours
-    verify: {
-      generateEmailHTML: (args: any) => {
-        return `<a href="${process.env.NEXT_PUBLIC_SERVER_URL}/verify-email?token=${args?.token}">Verify Email</a>`
-      },
-    },
+    verify: false, // Disable email verification for development
     forgotPassword: {
       generateEmailHTML: (args: any) => {
         return `<a href="${process.env.NEXT_PUBLIC_SERVER_URL}/reset-password?token=${args?.token}">Reset Password</a>`
