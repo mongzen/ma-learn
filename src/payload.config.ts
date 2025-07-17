@@ -1,24 +1,24 @@
 // storage-adapter-import-placeholder
-import { mongooseAdapter } from '@payloadcms/db-mongodb'
+import { mongooseAdapter } from '@payloadcms/db-mongodb';
 
-import path from 'path'
-import { buildConfig, PayloadRequest } from 'payload'
+import path from 'path';
+import { buildConfig, PayloadRequest } from 'payload';
 import sharp from 'sharp'; // sharp-import
-import { fileURLToPath } from 'url'
+import { fileURLToPath } from 'url';
 
-import { defaultLexical } from '@/fields/defaultLexical'
-import { Categories } from './collections/Categories'
-import { Courses } from './collections/Courses'
-import { Enrollments } from './collections/Enrollments'
-import { Media } from './collections/Media'
-import { Pages } from './collections/Pages'
-import { Posts } from './collections/Posts'
-import { Quizzes } from './collections/Quizzes'
-import { Users } from './collections/Users'
-import { Footer } from './Footer/config'
-import { Header } from './Header/config'
-import { plugins } from './plugins'
-import { getServerSideURL } from './utilities/getURL'
+import { defaultLexical } from '@/fields/defaultLexical';
+import { Categories } from './collections/Categories';
+import { Courses } from './collections/Courses';
+import { Enrollments } from './collections/Enrollments';
+import { Media } from './collections/Media';
+import { Pages } from './collections/Pages';
+import { Posts } from './collections/Posts';
+import { Quizzes } from './collections/Quizzes';
+import { Users } from './collections/Users';
+import { Footer } from './Footer/config';
+import { Header } from './Header/config';
+import { plugins } from './plugins';
+import { getServerSideURL } from './utilities/getURL';
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)

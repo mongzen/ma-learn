@@ -834,7 +834,7 @@ export interface Course {
         id?: string | null;
       }[]
     | null;
-  thumbnail: string | Media;
+  thumbnail?: (string | null) | Media;
   trailer?: (string | null) | Media;
   price: {
     fiatPrice: number;
