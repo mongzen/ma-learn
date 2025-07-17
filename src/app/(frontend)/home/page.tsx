@@ -1,8 +1,8 @@
-import React from 'react'
-import { getPayload } from 'payload'
 import config from '@payload-config'
-import Link from 'next/link'
 import { Metadata } from 'next'
+import Link from 'next/link'
+import { getPayload } from 'payload'
+import React from 'react'
 
 export const metadata: Metadata = {
   title: 'MaLearn - เรียนรู้ทักษะใหม่ออนไลน์',
@@ -64,7 +64,7 @@ export default async function HomePage() {
                 ที่คุณต้องการ
               </span>
             </h1>
-            
+
             <p className="text-xl md:text-2xl text-blue-100 mb-8 max-w-3xl mx-auto">
               พัฒนาตัวเองด้วยคอร์สออนไลน์คุณภาพสูงจากผู้เชี่ยวชาญ เรียนได้ทุกที่ทุกเวลา
             </p>

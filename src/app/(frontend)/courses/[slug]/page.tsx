@@ -1,9 +1,9 @@
-import React from 'react'
-import { getPayload } from 'payload'
 import config from '@payload-config'
-import { notFound } from 'next/navigation'
 import { Metadata } from 'next'
 import Link from 'next/link'
+import { notFound } from 'next/navigation'
+import { getPayload } from 'payload'
+import React from 'react'
 
 interface CoursePageProps {
   params: {
@@ -13,7 +13,7 @@ interface CoursePageProps {
 
 export async function generateMetadata({ params }: CoursePageProps): Promise<Metadata> {
   const payload = await getPayload({ config })
-  
+
   const courses = await payload.find({
     collection: 'courses',
     where: {
@@ -40,7 +40,7 @@ export async function generateMetadata({ params }: CoursePageProps): Promise<Met
 
 export default async function CoursePage({ params }: CoursePageProps) {
   const payload = await getPayload({ config })
-  
+
   const courses = await payload.find({
     collection: 'courses',
     where: {

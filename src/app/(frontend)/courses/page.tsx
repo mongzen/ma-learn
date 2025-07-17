@@ -1,8 +1,8 @@
-import React from 'react'
-import { getPayload } from 'payload'
 import config from '@payload-config'
-import Link from 'next/link'
 import { Metadata } from 'next'
+import Link from 'next/link'
+import { getPayload } from 'payload'
+import React from 'react'
 
 export const metadata: Metadata = {
   title: 'คอร์สออนไลน์ | MaLearn',
